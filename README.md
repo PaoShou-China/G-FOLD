@@ -193,7 +193,9 @@ The problem P1 is non-convex due to three main sources. Think of convexity like 
 
 ### 3. Lower Thrust Bound: The "Donut Hole" Problem
 
-**The Issue**: $\rho_1 \leq \|\mathbf{T}(t)\| \leq \rho_2$
+**The Issue**:
+
+$$\rho_1 \leq \|\mathbf{T}(t)\| \leq \rho_2$$
 
 **Intuition**: Most rockets can't throttle down to zero thrust — they have a minimum thrust level (like a car that can't idle below a certain RPM). This creates a "hole" in the feasible region.
 
@@ -319,7 +321,11 @@ $$u_z \geq \sigma \cos(\theta_{pt})$$
 
 #### Thrust Bounds — The Tricky One
 
-**Original**: $\rho_1 \leq \|\mathbf{T}\| \leq \rho_2$ (thrust must be between min and max)
+**Original**:
+
+$$\rho_1 \leq \|\mathbf{T}\| \leq \rho_2$$
+
+(thrust must be between min and max)
 
 **Transformed**: Divide by $m$:
 $$\frac{\rho_1}{m} \leq \frac{\|\mathbf{T}\|}{m} \leq \frac{\rho_2}{m} \quad \Rightarrow \quad \frac{\rho_1}{m} \leq \|\mathbf{u}\| \leq \frac{\rho_2}{m}$$
@@ -331,8 +337,18 @@ Substituting $m = \exp(\zeta)$:
 $$\rho_1 \exp(-\zeta) \leq \sigma \leq \rho_2 \exp(-\zeta)$$
 
 **The Problem**: 
-- **Upper bound** ($\sigma \leq \rho_2 \exp(-\zeta)$): This is convex! The exponential function curves upward, and we're staying *below* it.
-- **Lower bound** ($\sigma \geq \rho_1 \exp(-\zeta)$): This is **non-convex**! We're staying *above* a convex curve, which creates that "donut hole" problem we discussed earlier.
+
+- **Upper bound**:
+
+$$\sigma \leq \rho_2 \exp(-\zeta)$$
+
+This is convex! The exponential function curves upward, and we're staying *below* it.
+
+- **Lower bound**:
+
+$$\sigma \geq \rho_1 \exp(-\zeta)$$
+
+This is **non-convex**! We're staying *above* a convex curve, which creates that "donut hole" problem we discussed earlier.
 
 **Why This Matters**: The lower thrust bound is essential — most rockets can't throttle below a certain level. But mathematically, it's the hardest constraint to handle. We need one more trick: Taylor expansion approximation.
 
@@ -342,7 +358,11 @@ $$\rho_1 \exp(-\zeta) \leq \sigma \leq \rho_2 \exp(-\zeta)$$
 
 ### The Problem: Approximating the "Donut Hole"
 
-We still have one non-convex constraint: the lower thrust bound $\sigma \geq \rho_1 \exp(-\zeta)$. This is like trying to stay outside a curved boundary — mathematically tricky.
+We still have one non-convex constraint: the lower thrust bound:
+
+$$\sigma \geq \rho_1 \exp(-\zeta)$$
+
+This is like trying to stay outside a curved boundary — mathematically tricky.
 
 **The Solution**: Approximate the exponential curve with a simpler function that's convex and stays below the original curve. It's like replacing a curved wall with a straight (or gently curved) wall that's easier to work with.
 
