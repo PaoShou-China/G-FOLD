@@ -125,22 +125,22 @@ $$\mathbf{r}'(t) = \mathbf{v}(t)$$
 
 Component-wise:
 
-$r_z'(t) = v_z(t)$
+$$r_z'(t) = v_z(t)$$
 
-$r_x'(t) = v_x(t)$
+$$r_x'(t) = v_x(t)$$
 
-$r_y'(t) = v_y(t)$
+$$r_y'(t) = v_y(t)$$
 
 **Velocity:**
 $$\mathbf{v}'(t) = \mathbf{g} + \frac{\mathbf{T}(t)}{m(t)}$$
 
 Component-wise:
 
-$v_z'(t) = -g_0 + \frac{T_z(t)}{m(t)}$
+$$v_z'(t) = -g_0 + \frac{T_z(t)}{m(t)}$$
 
-$v_x'(t) = \frac{T_x(t)}{m(t)}$
+$$v_x'(t) = \frac{T_x(t)}{m(t)}$$
 
-$v_y'(t) = \frac{T_y(t)}{m(t)}$
+$$v_y'(t) = \frac{T_y(t)}{m(t)}$$
 
 **Mass:**
 $$m'(t) = -\alpha \|\mathbf{T}(t)\|$$
