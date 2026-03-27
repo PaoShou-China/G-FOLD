@@ -160,7 +160,8 @@ This comes from the rocket equation. The rate of mass loss is proportional to th
 ### Initial & Terminal Conditions
 
 **Initial:**
-$$\mathbf{r}(0) = \mathbf{r}_0, \quad \mathbf{v}(0) = \mathbf{v}_0, \quad m(0) = m_{wet}$$
+
+$$\mathbf{r}(0) = \mathbf{r}\_0, \quad \mathbf{v}(0) = \mathbf{v}\_0, \quad m(0) = m\_{wet}$$
 
 **Terminal:**
 $$r_z(t_f) = 0, \quad \mathbf{v}(t_f) = \mathbf{0}$$
@@ -459,7 +460,8 @@ $$\mu_1 \left[1 - (\zeta - \zeta_0) + \frac{(\zeta - \zeta_0)^2}{2}\right] \leq 
 ### Initial & Terminal Conditions
 
 **Initial:**
-$$\mathbf{r}(0) = \mathbf{r}_0, \quad \mathbf{v}(0) = \mathbf{v}_0, \quad \zeta(0) = \ln(m_{wet})$$
+
+$$\mathbf{r}(0) = \mathbf{r}\_0, \quad \mathbf{v}(0) = \mathbf{v}\_0, \quad \zeta(0) = \ln(m\_{wet})$$
 
 **Terminal:**
 $$r_z(t_f) = 0, \quad \mathbf{v}(t_f) = \mathbf{0}$$
