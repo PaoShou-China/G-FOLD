@@ -124,21 +124,23 @@ $$\min J = m(0) - m(t_f) \quad \Leftrightarrow \quad \min -m(t_f)$$
 $$\mathbf{r}'(t) = \mathbf{v}(t)$$
 
 Component-wise:
-$$\begin{aligned}
-r_z'(t) &= v_z(t) \\
-r_x'(t) &= v_x(t) \\
-r_y'(t) &= v_y(t)
-\end{aligned}$$
+
+$r_z'(t) = v_z(t)$
+
+$r_x'(t) = v_x(t)$
+
+$r_y'(t) = v_y(t)$
 
 **Velocity:**
 $$\mathbf{v}'(t) = \mathbf{g} + \frac{\mathbf{T}(t)}{m(t)}$$
 
 Component-wise:
-$$\begin{aligned}
-v_z'(t) &= -g_0 + \frac{T_z(t)}{m(t)} \\
-v_x'(t) &= \frac{T_x(t)}{m(t)} \\
-v_y'(t) &= \frac{T_y(t)}{m(t)}
-\end{aligned}$$
+
+$v_z'(t) = -g_0 + \frac{T_z(t)}{m(t)}$
+
+$v_x'(t) = \frac{T_x(t)}{m(t)}$
+
+$v_y'(t) = \frac{T_y(t)}{m(t)}$
 
 **Mass:**
 $$m'(t) = -\alpha \|\mathbf{T}(t)\|$$
