@@ -769,10 +769,12 @@ $$\phi = \frac{\sqrt{5} - 1}{2} \approx 0.618$$
 **Derivation**:
 
 From Newton's second law, the maximum deceleration is:
+
 $$a_{max} = \frac{F_{max}}{m_{min}} = \frac{\rho_2}{m_{dry}}$$
 
-To stop from initial velocity $\|\mathbf{v}_0\|$, the minimum time required is:
-$$t_{min} = \frac{\|\mathbf{v}_0\|}{a_{max}} = \frac{m_{dry} \|\mathbf{v}_0\|}{\rho_2}$$
+To stop from initial velocity $\|\mathbf{v}\_0\|$, the minimum time required is:
+
+$$t_{min} = \frac{\|\mathbf{v}\_0\|}{a_{max}} = \frac{m_{dry} \|\mathbf{v}\_0\|}{\rho_2}$$
 
 **Why this is a lower bound**: Even with maximum thrust and minimum mass, the rocket cannot decelerate faster than $a_{max}$. Therefore, any feasible trajectory must have $t_f \geq t_{min}$.
 
@@ -805,8 +807,8 @@ where $\alpha = \frac{1}{I_{sp} \cdot g_0}$ is the fuel consumption coefficient.
 
 | Bound | Condition | Physical Meaning | Formula |
 |-------|-----------|------------------|---------|
-| $t_{min}$ | Max thrust + Dry mass | Limit deceleration scenario | $\frac{m_{dry} \|\mathbf{v}_0\|}{\rho_2}$ |
-| $t_{max}$ | Min thrust + All fuel | Limit endurance scenario | $\frac{m_{fuel}}{\alpha \rho_1}$ |
+| $t_{min}$ | Max thrust + Dry mass | Limit deceleration scenario | $\\frac{m_{dry} \\|\\mathbf{v}\\_0\\|}{\\rho_2}$ |
+| $t_{max}$ | Min thrust + All fuel | Limit endurance scenario | $\\frac{m_{fuel}}{\\alpha \\rho_1}$ |
 
 ### The Algorithm Step-by-Step
 
@@ -923,8 +925,8 @@ Edit the mission parameters directly in the script before running.
 
 ```bash
 # Clone the repository
-git clone https://github.com/paoshou-china/gflop.git
-cd gflop
+git clone https://github.com/PaoShou-China/G-FOLD.git
+cd G-FOLD
 
 # Install dependencies
 pip install -r requirements.txt
