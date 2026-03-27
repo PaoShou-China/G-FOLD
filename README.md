@@ -223,11 +223,12 @@ Now comes the clever part — how do we turn this non-convex "mountain range" pr
 $$\mathbf{u}(t) = \frac{\mathbf{T}(t)}{m(t)} \quad [\text{m/s}^2]$$
 
 Component-wise:
-$$\begin{aligned}
-u_z(t) &= \frac{T_z(t)}{m(t)} \\
-u_x(t) &= \frac{T_x(t)}{m(t)} \\
-u_y(t) &= \frac{T_y(t)}{m(t)}
-\end{aligned}$$
+
+$$u_z(t) = \frac{T_z(t)}{m(t)}$$
+
+$$u_x(t) = \frac{T_x(t)}{m(t)}$$
+
+$$u_y(t) = \frac{T_y(t)}{m(t)}$$
 
 **Why This Helps**: Remember the bilinear term $\mathbf{T}/m$ that was causing trouble? Now it's just $\mathbf{u}$ — a single variable! We've "absorbed" the nonlinearity into the definition of our control variable.
 
@@ -246,11 +247,12 @@ $$\sigma(t) = \frac{\Gamma(t)}{m(t)} \quad [\text{m/s}^2]$$
 $$\mathbf{v}'(t) = \mathbf{g} + \mathbf{u}(t)$$
 
 Component-wise:
-$$\begin{aligned}
-v_z'(t) &= -g_0 + u_z(t) \\
-v_x'(t) &= u_x(t) \\
-v_y'(t) &= u_y(t)
-\end{aligned}$$
+
+$$v_z'(t) = -g_0 + u_z(t)$$
+
+$$v_x'(t) = u_x(t)$$
+
+$$v_y'(t) = u_y(t)$$
 
 ### Step 3: Transform Mass Dynamics Using Logarithm — The "Log Trick"
 
@@ -412,21 +414,24 @@ After change of variables and relaxation:
 $$\max \zeta(t_f) \quad \text{(maximize final log-mass)}$$
 
 ### Dynamics
-$$\begin{aligned}
-\mathbf{r}'(t) &= \mathbf{v}(t) \\
-\mathbf{v}'(t) &= \mathbf{g} + \mathbf{u}(t) \\
-\zeta'(t) &= -\alpha \sigma(t)
-\end{aligned}$$
+
+$$\mathbf{r}'(t) = \mathbf{v}(t)$$
+
+$$\mathbf{v}'(t) = \mathbf{g} + \mathbf{u}(t)$$
+
+$$\zeta'(t) = -\alpha \sigma(t)$$
 
 ### Constraints
 
-$$\begin{aligned}
-\|\mathbf{u}(t)\| &\leq \sigma(t) && \text{(second-order cone)} \\
-u_z(t) &\geq \sigma(t)\cos(\theta_{pt}) && \text{(linear)} \\
-\|\mathbf{v}(t)\| &\leq V_{max} && \text{(second-order cone)} \\
-\sqrt{r_x^2 + r_y^2} &\leq \cot(\theta_{gs}) \cdot r_z && \text{(second-order cone)} \\
-\zeta(t) &\geq \ln(m_{dry}) && \text{(linear)}
-\end{aligned}$$
+$$\|\mathbf{u}(t)\| \leq \sigma(t) \quad \text{(second-order cone)}$$
+
+$$u_z(t) \geq \sigma(t)\cos(\theta_{pt}) \quad \text{(linear)}$$
+
+$$\|\mathbf{v}(t)\| \leq V_{max} \quad \text{(second-order cone)}$$
+
+$$\sqrt{r_x^2 + r_y^2} \leq \cot(\theta_{gs}) \cdot r_z \quad \text{(second-order cone)}$$
+
+$$\zeta(t) \geq \ln(m_{dry}) \quad \text{(linear)}$$
 
 ### Thrust Bounds (Taylor Approximation)
 $$\mu_1 \left[1 - (\zeta - \zeta_0) + \frac{(\zeta - \zeta_0)^2}{2}\right] \leq \sigma \leq \mu_2 \left[1 - (\zeta - \zeta_0)\right]$$
@@ -565,11 +570,12 @@ At each time step $n$, we have:
 $$\mathbf{r}[n+1] = \mathbf{r}[n] + \frac{\Delta t}{2}(\mathbf{v}[n+1] + \mathbf{v}[n])$$
 
 **Component-wise**:
-$$\begin{aligned}
-r_z[n+1] &= r_z[n] + \frac{\Delta t}{2}(v_z[n+1] + v_z[n]) \\
-r_x[n+1] &= r_x[n] + \frac{\Delta t}{2}(v_x[n+1] + v_x[n]) \\
-r_y[n+1] &= r_y[n] + \frac{\Delta t}{2}(v_y[n+1] + v_y[n])
-\end{aligned}$$
+
+$$r_z[n+1] = r_z[n] + \frac{\Delta t}{2}(v_z[n+1] + v_z[n])$$
+
+$$r_x[n+1] = r_x[n] + \frac{\Delta t}{2}(v_x[n+1] + v_x[n])$$
+
+$$r_y[n+1] = r_y[n] + \frac{\Delta t}{2}(v_y[n+1] + v_y[n])$$
 
 **Physical Interpretation**: The position change equals the average velocity over the interval multiplied by the time step. This is more accurate than using just the initial or final velocity because it accounts for acceleration during the interval.
 
@@ -583,12 +589,12 @@ r_y[n+1] &= r_y[n] + \frac{\Delta t}{2}(v_y[n+1] + v_y[n])
 $$\mathbf{v}[n+1] = \mathbf{v}[n] + \frac{\Delta t}{2}\left((\mathbf{u}[n] + \mathbf{g}) + (\mathbf{u}[n+1] + \mathbf{g})\right)$$
 
 **Component-wise**:
-$$\begin{aligned}
-v_z[n+1] &= v_z[n] + \frac{\Delta t}{2}\left((u_z[n] - g_0) + (u_z[n+1] - g_0)\right) \\
-         &= v_z[n] + \frac{\Delta t}{2}(u_z[n] + u_z[n+1]) - g_0 \Delta t \\
-v_x[n+1] &= v_x[n] + \frac{\Delta t}{2}(u_x[n] + u_x[n+1]) \\
-v_y[n+1] &= v_y[n] + \frac{\Delta t}{2}(u_y[n] + u_y[n+1])
-\end{aligned}$$
+
+$$v_z[n+1] = v_z[n] + \frac{\Delta t}{2}(u_z[n] + u_z[n+1]) - g_0 \Delta t$$
+
+$$v_x[n+1] = v_x[n] + \frac{\Delta t}{2}(u_x[n] + u_x[n+1])$$
+
+$$v_y[n+1] = v_y[n] + \frac{\Delta t}{2}(u_y[n] + u_y[n+1])$$
 
 **Key Observations**:
 1. **Gravity term** ($-g_0 \Delta t$): Constant acceleration due to gravity, acts continuously
