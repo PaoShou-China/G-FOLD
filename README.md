@@ -58,6 +58,8 @@ From the repository root:
 
 ```bash
 python main.py
+# Example: change mission, intervals, and output; skip interactive plots
+python main.py --mission mars --intervals 50 --output results/mars.json --no-visualization
 ```
 
 The defaults select the Earth preset, 50 discretization intervals, output file `trajectory_results.json`, and enabled visualization. Override them from the command line or edit the constants near the top of `main.py`.
