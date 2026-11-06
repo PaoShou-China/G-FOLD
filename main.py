@@ -41,7 +41,7 @@ class RunConfig:
         normalized_mission = self.mission_type.strip().lower()
         if normalized_mission not in {"earth", "mars"}:
             raise ValueError("mission_type must be 'earth' or 'mars'.")
-        if isinstance(self.num_intervals, bool) or self.num_intervals < 2:
+        if isinstance(self.num_intervals, bool) or not isinstance(self.num_intervals, (int, np.integer)) or self.num_intervals < 2:
             raise ValueError("num_intervals must be an integer greater than or equal to 2.")
         if not self.output_file:
             raise ValueError("output_file must not be empty.")
