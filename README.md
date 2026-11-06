@@ -54,9 +54,10 @@ The optional GUI uses Tkinter. Some Linux distributions package it separately fr
 
 ## Quick start
 
-From the repository root:
+From the repository root, inspect the available options and run the configured Earth mission:
 
 ```bash
+python main.py --help
 python main.py
 # Example: change mission, intervals, and output; skip interactive plots
 python main.py --mission mars --intervals 50 --output results/mars.json --no-visualization
@@ -64,7 +65,7 @@ python main.py --mission mars --intervals 50 --output results/mars.json --no-vis
 
 The defaults select the Earth preset, 50 discretization intervals, output file `trajectory_results.json`, and enabled visualization. Override them from the command line or edit the constants near the top of `main.py`.
 
-The JSON file records mission metadata and the position, velocity, mass, thrust, slack, and log-mass trajectories. Plotly opens trajectory and telemetry views when visualization is enabled. Options include `--mission earth|mars`, `--intervals N`, `--output PATH`, and `--no-visualization`.
+The JSON file records mission metadata and the position, velocity, mass, thrust, slack, and log-mass trajectories. Non-finite numeric results are rejected, and the output file is replaced only after a complete JSON write. Plotly opens trajectory and telemetry views when visualization is enabled. Options include `--mission earth|mars`, `--intervals N`, `--output PATH`, and `--no-visualization`.
 
 To launch the optional desktop interface:
 
@@ -87,7 +88,7 @@ python gui.py
 
 ## Reproduction notes and limitations
 
-The CLI accepts `--mission`, `--intervals`, `--output`, and `--no-visualization`; module constants remain available for existing scripts that import `main.py`. Results depend on the installed CVXPY and solver versions. Record the source revision, Python and package versions, mission preset, and configuration when reporting a run.
+The CLI accepts `--mission`, `--intervals`, `--output`, and `--no-visualization`; module constants remain available for existing scripts that import `main.py`. Solver and Plotly imports are deferred until a run needs them, so `--help` does not require CVXPY or Plotly. Results depend on the installed CVXPY and solver versions. Record the source revision, Python and package versions, mission preset, and configuration when reporting a run.
 
 This code does not implement a full six-degree-of-freedom vehicle model, atmosphere, terrain interaction, or a closed-loop flight controller. The illustration is conceptual and does not depict computed results.
 
