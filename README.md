@@ -8,7 +8,7 @@
 
 ![G-FOLD powered descent illustration](assets/hero.svg)
 
-[Project homepage](https://paoshou-china.github.io/G-FOLD/) · [Source code](https://github.com/PaoShou-China/G-FOLD)
+[Project homepage](https://paoshou-china.github.io/G-FOLD/) *(deployed by the repository Pages workflow)* · [Source code](https://github.com/PaoShou-China/G-FOLD)
 
 ## What it contains
 
