@@ -9,6 +9,8 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import os
+import tempfile
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -17,8 +19,6 @@ from typing import Sequence
 import numpy as np
 
 from mission import EarthMission, MarsMission
-from solver import TrajectorySolver
-from visualize import plot_trajectory
 
 
 # Backward-compatible defaults for existing scripts that import these names.
@@ -107,9 +107,21 @@ def save_results(
     s: np.ndarray,
     zeta: np.ndarray,
 ) -> None:
-    """Write solver output to JSON, creating the destination directory if needed."""
+    """Validate and atomically write finite solver output as standard JSON."""
     output_path = Path(output_file).expanduser()
     output_path.parent.mkdir(parents=True, exist_ok=True)
+    numeric_values = {
+        "flight_time": flight_time,
+        "mass": m,
+        "state": x,
+        "control": u,
+        "thrust slack": s,
+        "log mass": zeta,
+        "landing point": mission_config.landing_point,
+    }
+    for name, value in numeric_values.items():
+        if not np.all(np.isfinite(np.asarray(value, dtype=float))):
+            raise ValueError(f"{name} contains NaN or infinite values.")
     results = {
         "timestamp": datetime.now().isoformat(),
         "mission_type": mission_config.__class__.__name__,
@@ -128,8 +140,24 @@ def save_results(
             "zeta": zeta.tolist(),
         },
     }
-    with output_path.open("w", encoding="utf-8") as result_file:
-        json.dump(results, result_file, indent=2)
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=output_path.parent,
+            prefix=f".{output_path.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as result_file:
+            temporary_path = Path(result_file.name)
+            json.dump(results, result_file, indent=2, allow_nan=False)
+            result_file.write("\n")
+        os.replace(temporary_path, output_path)
+    except Exception:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
+        raise
     print(f"  Results saved to: {output_path}")
 
 
@@ -141,6 +169,8 @@ def run(config: RunConfig) -> int:
     print_header("STARTING OPTIMIZATION PROCESS")
 
     try:
+        from solver import TrajectorySolver
+
         result = TrajectorySolver(mission_config, N=config.num_intervals).solve()
         if result is None:
             print("\n  OPTIMIZATION FAILED: solver returned no solution.")
@@ -155,6 +185,8 @@ def run(config: RunConfig) -> int:
                      flight_time, m, x, u, s, zeta)
 
         if config.enable_visualization:
+            from visualize import plot_trajectory
+
             print("\n  Generating visualizations...")
             plot_trajectory(flight_time, x, u, m, s, zeta, mission_config)
 
