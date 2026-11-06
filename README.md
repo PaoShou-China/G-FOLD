@@ -60,9 +60,9 @@ From the repository root:
 python main.py
 ```
 
-The current constants near the top of `main.py` select the Earth preset, 50 discretization intervals, output file `trajectory_results.json`, and enabled visualization. Edit those constants to change the mission, interval count, output path, or plot setting.
+The defaults select the Earth preset, 50 discretization intervals, output file `trajectory_results.json`, and enabled visualization. Override them from the command line or edit the constants near the top of `main.py`.
 
-The JSON file records mission metadata and the position, velocity, mass, thrust, slack, and log-mass trajectories. Plotly opens trajectory and telemetry views when visualization is enabled.
+The JSON file records mission metadata and the position, velocity, mass, thrust, slack, and log-mass trajectories. Plotly opens trajectory and telemetry views when visualization is enabled. Options include `--mission earth|mars`, `--intervals N`, `--output PATH`, and `--no-visualization`.
 
 To launch the optional desktop interface:
 
@@ -80,6 +80,7 @@ python gui.py
 | `visualize.py` | Creates Plotly 3D trajectory and telemetry views. |
 | `gui.py` | Tkinter interface for configuring and viewing trajectory optimization. |
 | `index.html` | Static project homepage. |
+| `.github/workflows/pages.yml` | Publishes the repository root to GitHub Pages. |
 | `assets/hero.svg` | Source-grounded method schematic; the trajectory drawing is explicitly illustrative. |
 
 ## Reproduction notes and limitations
