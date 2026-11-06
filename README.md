@@ -87,7 +87,7 @@ python gui.py
 
 ## Reproduction notes and limitations
 
-Mission parameters, discretization count, output filename, and visualization toggle are constants in `main.py`; there is no command-line argument parser. Results depend on the installed CVXPY and solver versions. Record the source revision, Python and package versions, mission preset, and configuration when reporting a run.
+The CLI accepts `--mission`, `--intervals`, `--output`, and `--no-visualization`; module constants remain available for existing scripts that import `main.py`. Results depend on the installed CVXPY and solver versions. Record the source revision, Python and package versions, mission preset, and configuration when reporting a run.
 
 This code does not implement a full six-degree-of-freedom vehicle model, atmosphere, terrain interaction, or a closed-loop flight controller. The illustration is conceptual and does not depict computed results.
 
