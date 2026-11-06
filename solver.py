@@ -27,10 +27,49 @@ class LcvxOptimizer:
             problem_type: 'p3' for minimum landing error, 'p4' for minimum fuel
             packed_data: Tuple containing (x0, z0_term_inv, z0_term_log, g, rf, sparse_params)
         """
-        self.N = N
+        if isinstance(N, bool) or not isinstance(N, (int, np.integer)) or N < 2:
+            raise ValueError("N must be an integer greater than or equal to 2.")
+        if problem_type not in ("p3", "p4"):
+            raise ValueError("problem_type must be 'p3' (minimum landing error) or 'p4' (minimum fuel).")
+        if not isinstance(packed_data, (tuple, list)) or len(packed_data) != 6:
+            raise ValueError(
+                "packed_data must contain (x0, z0_term_inv, z0_term_log, g, rf, sparse_params)."
+            )
+
+        self.N = int(N)
         self.problem_type = 3 if problem_type == 'p3' else 4
-        self.x0, self.z0_term_inv, self.z0_term_log, self.g, self.rf, self.sparse_params = packed_data
+        self.x0, self.z0_term_inv, self.z0_term_log, self.g, self.rf, self.sparse_params = (
+            np.asarray(value, dtype=float) for value in packed_data
+        )
+        expected_shapes = {
+            "x0": (6, 1),
+            "z0_term_inv": (1, self.N),
+            "z0_term_log": (1, self.N),
+            "g": (3, 1),
+            "rf": (3,),
+            "sparse_params": (8, 1),
+        }
+        arrays = {
+            "x0": self.x0,
+            "z0_term_inv": self.z0_term_inv,
+            "z0_term_log": self.z0_term_log,
+            "g": self.g,
+            "rf": self.rf,
+            "sparse_params": self.sparse_params,
+        }
+        for name, value in arrays.items():
+            if value.shape != expected_shapes[name]:
+                raise ValueError(
+                    f"{name} must have shape {expected_shapes[name]}, got {value.shape}."
+                )
+            if not np.all(np.isfinite(value)):
+                raise ValueError(f"{name} must contain only finite values.")
+
+        if np.any(self.z0_term_inv <= 0):
+            raise ValueError("z0_term_inv must contain positive values.")
         self._unpack_params()
+        if self.tf_ <= 0:
+            raise ValueError("flight_time (sparse_params[7]) must be positive.")
         self.dt = self.tf_ / self.N
         self._setup_variables()
         self._build_constraints()
