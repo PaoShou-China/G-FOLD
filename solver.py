@@ -190,7 +190,9 @@ class LcvxOptimizer:
         problem = cp.Problem(objective, self.con)
         obj_opt = problem.solve(solver='CLARABEL', verbose=True)
 
-        if self.zeta.value is None:
+        if problem.status not in (cp.OPTIMAL, cp.OPTIMAL_INACCURATE):
+            return None
+        if any(value is None for value in (self.x.value, self.u.value, self.zeta.value, self.s.value)):
             return None
 
         m = np.exp(self.zeta.value)
