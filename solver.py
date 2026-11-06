@@ -231,18 +231,28 @@ class TrajectorySolver:
         min_thrust = max(self.config.thrust_lower_bound, 0.01 * self.config.thrust_upper_bound)
         t_max = self.config.mass_fuel / (self.config.alpha * min_thrust)
 
-        # Golden section search
+        # Golden section search. Reuse the surviving interior point and its
+        # cost after each interval reduction, avoiding one repeated CVXPY solve.
+        costs_initialized = False
         while (t_max - t_min) ** 2 > self.tol:
             dt = (t_max - t_min) * self.golden_ratio
             t1, t2 = t_min + dt, t_max - dt
 
-            c1 = self._compute_cost(t1, problem_type, rf)
-            c2 = self._compute_cost(t2, problem_type, rf)
+            if not costs_initialized:
+                c1 = self._compute_cost(t1, problem_type, rf)
+                c2 = self._compute_cost(t2, problem_type, rf)
+                costs_initialized = True
 
             if c1 > c2:
                 t_max = t1
+                t1, c1 = t2, c2
+                t2 = t_max - (t_max - t_min) * self.golden_ratio
+                c2 = self._compute_cost(t2, problem_type, rf)
             else:
                 t_min = t2
+                t2, c2 = t1, c1
+                t1 = t_min + (t_max - t_min) * self.golden_ratio
+                c1 = self._compute_cost(t1, problem_type, rf)
 
         return (t_max + t_min) * 0.5
 
