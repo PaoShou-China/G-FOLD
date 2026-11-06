@@ -113,6 +113,7 @@ def save_results(
     numeric_values = {
         "flight_time": flight_time,
         "mass": m,
+        "initial mass": mission_config.mass_wet,
         "state": x,
         "control": u,
         "thrust slack": s,
