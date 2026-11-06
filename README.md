@@ -1,24 +1,42 @@
 # G-FOLD: Fuel-Optimal Powered Landing Guidance
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CVXPY](https://img.shields.io/badge/CVXPY-1.5+-green.svg)](https://www.cvxpy.org/)
+[Project homepage](https://paoshou-china.github.io/G-FOLD/) · [Source repository](https://github.com/PaoShou-China/G-FOLD)
 
-**A powered-descent trajectory optimization example using lossless convexification (LCVX).**
+![Conceptual powered-descent and LCVX optimization schematic; the path is illustrative and is not a solver result](assets/hero.svg)
 
-![G-FOLD powered descent illustration](assets/hero.svg)
+A Python example of powered-descent trajectory optimization using lossless convexification (LCVX). The repository includes Earth and Mars parameter presets, a two-stage solver, a command-line entry point, an optional Tkinter GUI, and Plotly trajectory and telemetry views.
 
-[Project homepage](https://paoshou-china.github.io/G-FOLD/) *(deployed by the repository Pages workflow)* · [Source code](https://github.com/PaoShou-China/G-FOLD)
+## Method in this implementation
 
-## What it contains
+The solver state is position, velocity, and log mass. It uses the transformed variables:
 
-This repository provides Earth and Mars mission parameter presets, a two-stage trajectory solver, a Tkinter graphical interface, and Plotly trajectory and telemetry views.
+- (u=T/m): control acceleration
+- (zeta=ln(m)): log mass
+- (sigma=Gamma/m): scaled thrust slack
 
-The solver uses transformed control acceleration, log mass, and a thrust slack variable. It implements P3 and P4 optimization stages; consult the cited LCVX reference and the implementation for the exact assumptions and constraints. The supplied mission models are simplified powered-descent scenarios, not high-fidelity vehicle models.
+The dynamics are discretized with trapezoidal integration. The path constraints in `solver.py` include glide slope, maximum velocity, thrust magnitude, thrust pointing, and Taylor-expanded thrust bounds. Terminal constraints impose zero velocity and zero terminal slack; the P3/P4 stages add their respective landing conditions.
+
+The current two-stage workflow is:
+
+1. **P3:** minimize terminal position error, with terminal altitude constrained to zero.
+2. **P4:** use the P3 terminal position as the target, then maximize terminal log mass (equivalent to minimizing fuel use for fixed initial mass).
+
+The flight-time estimate uses a golden-section search around calls to the convex solver. CVXPY is invoked with CLARABEL. See `solver.py` for the precise equations and constraint construction.
+
+## Mission presets
+
+Values below are defined in `mission.py`.
+
+| Preset | Gravity | Dry mass | Fuel mass | Initial wet mass |
+| --- | ---: | ---: | ---: | ---: |
+| EarthMission | 9.81 m/s² | 5,000 kg | 1,200 kg | 6,200 kg |
+| MarsMission | 3.71 m/s² | 2,000 kg | 800 kg | 2,800 kg |
+
+These are simplified configured scenarios, not validated vehicle designs or high-fidelity environmental models.
 
 ## Installation
 
-Python 3.10 or newer is recommended.
+Python 3.10 or newer is recommended. Install the listed Python packages:
 
 ```bash
 git clone https://github.com/PaoShou-China/G-FOLD.git
@@ -26,24 +44,27 @@ cd G-FOLD
 python -m venv .venv
 # Linux/macOS
 source .venv/bin/activate
-# Windows PowerShell: .venv\Scripts\Activate.ps1
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-The GUI uses Tkinter, which is included with many Python installations. On some Linux distributions it must be installed separately through the system package manager.
+The optional GUI uses Tkinter. Some Linux distributions package it separately from Python.
 
 ## Quick start
 
-Run the configured Earth mission from the command line:
+From the repository root:
 
 ```bash
 python main.py
 ```
 
-The current defaults in `main.py` select the Earth preset, use 50 discretization intervals, write `trajectory_results.json`, and display Plotly visualizations. To change the mission, interval count, output filename, or visualization setting, edit the corresponding constants near the top of `main.py`.
+The current constants near the top of `main.py` select the Earth preset, 50 discretization intervals, output file `trajectory_results.json`, and enabled visualization. Edit those constants to change the mission, interval count, output path, or plot setting.
 
-Launch the optional Tkinter interface with:
+The JSON file records mission metadata and the position, velocity, mass, thrust, slack, and log-mass trajectories. Plotly opens trajectory and telemetry views when visualization is enabled.
+
+To launch the optional desktop interface:
 
 ```bash
 python gui.py
@@ -53,22 +74,19 @@ python gui.py
 
 | File | Purpose |
 | --- | --- |
-| `main.py` | Runs the configured mission, saves trajectory results as JSON, and optionally displays plots. |
-| `mission.py` | Defines shared mission parameters and Earth/Mars presets. |
-| `solver.py` | Builds and solves the LCVX optimization stages. |
+| `main.py` | Configures and runs the command-line mission; writes trajectory results and optionally displays plots. |
+| `mission.py` | Defines the shared mission parameters and Earth/Mars presets. |
+| `solver.py` | Builds the P3/P4 convex programs, estimates flight time, and solves them. |
 | `visualize.py` | Creates Plotly 3D trajectory and telemetry views. |
-| `gui.py` | Tkinter interface for configuring and viewing a trajectory optimization. |
+| `gui.py` | Tkinter interface for configuring and viewing trajectory optimization. |
+| `index.html` | Static project homepage. |
+| `assets/hero.svg` | Source-grounded method schematic; the trajectory drawing is explicitly illustrative. |
 
-## Reproduction notes
+## Reproduction notes and limitations
 
-- The mission values, discretization count, output path, and plot toggle are configured in `main.py`.
-- Edit the mission classes in `mission.py` to change physical parameters.
-- The result JSON includes mission metadata and state/control trajectories.
-- Results depend on the chosen CVXPY solver backend and installed solver packages; check the solver status reported by the code.
+Mission parameters, discretization count, output filename, and visualization toggle are constants in `main.py`; there is no command-line argument parser. Results depend on the installed CVXPY and solver versions. Record the source revision, Python and package versions, mission preset, and configuration when reporting a run.
 
-## Model assumptions and limits
-
-The repository represents the state as position, velocity, and log mass, and applies discretized powered-descent dynamics with glide-slope, thrust-pointing, throttle, velocity, and terminal constraints. It does not include a full six-degree-of-freedom vehicle model, atmosphere, terrain, or closed-loop flight controller.
+This code does not implement a full six-degree-of-freedom vehicle model, atmosphere, terrain interaction, or a closed-loop flight controller. The illustration is conceptual and does not depict computed results.
 
 ## Reference
 
